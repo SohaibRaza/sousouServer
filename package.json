@@ -1,0 +1,42 @@
+{
+  "name": "sousou",
+  "version": "1.0.0",
+  "description": "Sousou web app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mosestechnologies/SouSou.git"
+  },
+  "author": "Muhammad Sohaib Raza",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mosestechnologies/SouSou/issues"
+  },
+  "homepage": "https://github.com/mosestechnologies/SouSou#readme",
+  "dependencies": {
+    "@trendmicro/react-sidenav": "^0.5.0",
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "bootstrap": "^4.5.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "formik": "^2.1.5",
+    "jquery": "^3.5.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.28",
+    "nodemon": "^2.0.4",
+    "paypal-rest-sdk": "^1.8.1",
+    "react-pro-sidebar": "^0.4.4",
+    "reactstrap": "^8.5.1",
+    "yup": "^0.29.3",
+    "chalk": "^4.1.0",
+    "dotenv": "^8.2.0",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+  }
+}

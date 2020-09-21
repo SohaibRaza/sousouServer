@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="black-dash.css">
+    <title>Document</title>
+</head>
+<body>
+
+    <div class=" container">
+        <div id="status"></div>
+        <div class="card" >
+            <div class="card-header">
+                <center>
+                    <h2>Enter Group Details</h2>
+                </center>
+
+            </div>
+            <div class="row justify-content-center mb-4">
+                <div class="col-9 mt-4">
+
+<!-- -------------------------------- form --------------------------------- -->
+
+                        <div class="form-group">
+                            <input type="text" placeholder="Group Title" class="form-control" id="title"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="Number of Members" class="form-control" id="members"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="Payment Frequency" class="form-control" id="frequency"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="Target Amount" class="form-control" id="target"/>
+                        </div>
+                        <button id="add" type="submit" class="btn btn-primary">Add</button>
+
+                </div>
+            </div>
+<!-- ------------------------------ form end ------------------------------- -->
+
+            <!-- <h2> Contribute </h2>
+            <h2>USD 100.00 </h2>
+            <a href="http://localhost:5000/payment/paypal">
+                <button class="btn btn-warning btn-lg"> Pay </button>
+            </a> -->
+        </div>
+        <div class="" id="content">
+
+        </div>
+    </div>
+
+    <script src="jquery.js"></script>
+    <script>
+        const titles = $("#title").val('friends12');
+        const memberss = $("#members").val('20');
+        const frequencys = $("#frequency").val('500');
+        const targets = $("#target").val('20000');
+
+        const groupSuccess = (data) => {
+            console.log('<<<  SUCCESS  >>>', data);
+            function renderGroup (data) {
+                console.log('RENDERING', data);
+                console.log('RENDERING', data.Groups.members.length);
+                $('#content').attr('class', 'card')
+                $('#content').append(`<div class="card-header"><h2 class="alert alert-danger">${data.Groups.title}</h2><div>`)
+                $('#content').append(`<div class="card-body" id="group-body"><h4>Group Members: ${data.Groups.members[0].username}</h4><div>`)
+                $('#group-body').append(`<h4>Limit: ${data.Groups.members_limit}</h4>`);
+                $('#group-body').append(`<h4>Joined: ${data.Groups.members.length}</h4>`);
+                $('#group-body').append(`<h4>Remaining: ${data.Groups.members_limit - data.Groups.members.length}</h4>`);
+            }
+
+
+            $('#status').attr('class', 'alert alert-success mt-3');
+            $('#status').html(`Group "${data.result[0].title}" Successfully created`);
+            $('#content').append
+            $.ajax({
+                url: `http://localhost:5000/group/get/${data.result[0].title}`,
+                type: 'GET',
+                success: renderGroup,
+                error: groupFail
+            });
+            console.log(`http://localhost:5000/group/get/${data.result[0].title}`);
+        };
+
+        const groupFail = (data) => {
+            console.log(data);
+            $('#status').attr('class', 'alert alert-primary mt-3');
+            $('#status').html(`Failed! An Error Occures`);
+        };
+
+
+            //console.log(data);
+
+            $(document).ready(function () {
+                $(document).on('click', 'button', () => {
+                const data = {
+                    "title" : $("#title").val(),
+                    "members": "5f48fadb20130633e0299933",
+                    "created_by": "5f48fadb20130633e0299933",
+                    "target_amount": $("#target").val(),
+                    "payment_frequency": $("#frequency").val(),
+                    "payment_cycle": "Weekly",
+                    "duration": "1",
+                    "members_limit": $("#members").val()
+                };
+                console.log(data);
+                const stringifyData = JSON.stringify(data);
+                    $.ajax({
+                        url: 'http://localhost:5000/group/create',
+                        type: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNDhmYWRiMjAxMzA2MzNlMDI5OTkzMyIsInVzZXJuYWVtIjoic2dhcnJpc2g2IiwiaWF0IjoxNTk4NjE4MzQxfQ.oA-R4wFZ1QrIj0uzhnyRIVDZCgucGSZ4dPGvZQdGxTo'
+                        },
+                        data: stringifyData,
+                        success: groupSuccess,
+                        error: groupFail
+                    });
+                });
+            });
+
+        // $("button").click(function(){
+            // fetch('http://localhost:5000/group/create', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNDhmYWRiMjAxMzA2MzNlMDI5OTkzMyIsInVzZXJuYWVtIjoic2dhcnJpc2g2IiwiaWF0IjoxNTk4NjE4MzQxfQ.oA-R4wFZ1QrIj0uzhnyRIVDZCgucGSZ4dPGvZQdGxTo'
+            //     },
+            //     body: JSON.stringify(data),
+            // })
+            // .then(response => response.json())
+            // .then(data => {
+            //     groupData = data;
+            //     console.log('Success:', data);
+            //     console.log('groupData: ', groupData);
+            // })
+            // .catch((error) => {
+            //     console.error('Error:', error);
+            // });
+        // });
+    </script>
+</body>
+</html>
