@@ -15,4 +15,6 @@ router.get('/joingroup/:userID/:groupID', controller.join_group);
 
 router.post('/testpayment/:groupID/:userID', validate, controller.test_payment);
 
+router.post('/update/:groupID', validate, controller.update)
+
 module.exports =  router;

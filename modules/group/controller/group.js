@@ -17,6 +17,43 @@ exports.create = async (req, res) => {
 	}
 };
 
+exports.update = async (req, res) => {
+
+	const id = req.params.groupID;
+	const updateOps = {};
+	Object.keys(req.body).forEach((key) => {
+		updateOps[key] = req.body[key];
+	})
+
+	try {
+		const group = await Group.findById(id);
+		if (group.cycle_status.current_status == "Pending") {
+			const result = await Group.findByIdAndUpdate(id, { $set: updateOps });
+			if (result) {
+				res.status(200).json({
+					message: "Group updated",
+					result: result
+				});
+			} else {
+				res.status(400).json({
+					"error": "Unable to update"
+				});
+			}
+		}else{
+			res.status(400).json({
+				"error": "Can not update group when payment cycle has started."
+			});
+		}
+	} catch (err) {
+		res.status(400).json({
+			"error": error
+		});
+	}
+
+	return;
+
+}
+
 exports.get_groups = async (req, res) => {
 	console.log(req.id);
 	try {
@@ -35,19 +72,20 @@ exports.get_groups = async (req, res) => {
 };
 
 exports.get_group = async (req, res) => {
+	const memberID = req.body.memberID;
+	const isMemberPartOfGroup = false;
 	console.log('body', req.body);
 	try {
 		const data = await Group.find({ _id: req.params.id }).populate('members');
 		console.log('DATA: ???>> ', data);
 		let membersArray = Object.values(data.members);
 		for (const member of membersArray) {
-			if (req.body.userID === member.toString()) {
-				return res.status(200).json({ group: data });
-			}
-			else{
-				return res.status(403).json('Not Allowed');
+			if (memberID == member.toString()) {
+				isMemberPartOfGroup = true
 			}
 		}
+		if(isMemberPartOfGroup)return res.status(200).json({ group: data });
+		else return res.status(400).json({error: "Access denied to view group."})
 
 	} catch (error) {
 		console.log("Error: ", error);
@@ -113,7 +151,7 @@ exports.join_group = async (req, res) => {
 				return res.status(403).json(responseJSON);
 			}
 		}
-		else{
+		else {
 			return res.status(404).json({
 				message: "Invalid Group",
 				success: false
