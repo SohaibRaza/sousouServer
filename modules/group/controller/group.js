@@ -35,7 +35,6 @@ exports.get_groups = async (req, res) => {
 };
 
 exports.get_group = async (req, res) => {
-	console.log(req.id);
 	console.log('body', req.body);
 	try {
 		const data = await Group.find({ _id: req.params.id }).populate('members');
