@@ -27,7 +27,7 @@ exports.update = async (req, res) => {
 
 	try {
 		const group = await Group.findById(id);
-		if (group.cycle_status.length == "PENDING") {
+		if (group.cycle_status.length === 0) {
 			const result = await Group.findByIdAndUpdate(id, { $set: updateOps });
 			if (result) {
 				res.status(200).json({
