@@ -27,21 +27,27 @@ exports.update = async (req, res) => {
 
 	try {
 		const group = await Group.findById(id);
-		if (group.cycle_status.length === 0) {
-			const result = await Group.findByIdAndUpdate(id, { $set: updateOps });
-			if (result) {
-				res.status(200).json({
-					message: "Group updated",
-					result: result
-				});
-			} else {
+		if(group.created_by == req.body.userID){
+			if (group.cycle_status.length === 0) {
+				const result = await Group.findByIdAndUpdate(id, { $set: updateOps });
+				if (result) {
+					res.status(200).json({
+						message: "Group updated",
+						result: result
+					});
+				} else {
+					res.status(400).json({
+						"error": "Unable to update"
+					});
+				}
+			}else{
 				res.status(400).json({
-					"error": "Unable to update"
+					"error": "Can not update group when payment cycle has started."
 				});
 			}
 		}else{
 			res.status(400).json({
-				"error": "Can not update group when payment cycle has started."
+				"error": "You are not permitted to update the group."
 			});
 		}
 	} catch (err) {
