@@ -1,6 +1,16 @@
 const mongoose = require("mongoose")
 const Users = require('../../users/model/users');
 const Schema = mongoose.Schema
+
+
+const paypalPaymentInfo = new Schema({
+    userID: { type: Schema.Types.ObjectId, ref: 'Users' },
+    paymentJSON: {
+        type: String,
+        required: true
+    }
+})
+
 const paymentStatusSchema = new Schema({
     cycle_number: {
         type: Number,
@@ -18,6 +28,10 @@ const paymentStatusSchema = new Schema({
         required: true,
         default: 'PENDING',
     },
+    payment_info: {
+        type: [paypalPaymentInfo],
+        default: []
+    }
 });
 
 const group = new Schema({
@@ -54,7 +68,10 @@ const group = new Schema({
         type: Number,
         require: true
     },
-    cycle_status: [paymentStatusSchema]
+    cycle_status: {
+        type: [paymentStatusSchema],
+        default: []
+    }
 })
 
 module.exports = mongoose.model("Group", group);

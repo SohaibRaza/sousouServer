@@ -27,7 +27,7 @@ exports.update = async (req, res) => {
 
 	try {
 		const group = await Group.findById(id);
-		if(group.created_by == req.body.userID){
+		if (group.created_by == req.body.userID) {
 			if (group.cycle_status.length === 0) {
 				const result = await Group.findByIdAndUpdate(id, { $set: updateOps });
 				if (result) {
@@ -40,12 +40,12 @@ exports.update = async (req, res) => {
 						"error": "Unable to update"
 					});
 				}
-			}else{
+			} else {
 				res.status(400).json({
 					"error": "Can not update group when payment cycle has started."
 				});
 			}
-		}else{
+		} else {
 			res.status(400).json({
 				"error": "You are not permitted to update the group."
 			});
@@ -96,8 +96,8 @@ exports.get_group = async (req, res) => {
 			}
 		}
 		console.log('after loop');
-		if(isMemberPartOfGroup)return res.status(200).json({ group: data });
-		else return res.status(400).json({error: "Access denied to view group."})
+		if (isMemberPartOfGroup) return res.status(200).json({ group: data });
+		else return res.status(400).json({ error: "Access denied to view group." })
 
 	} catch (error) {
 		console.log("Error: ", error);
@@ -188,8 +188,31 @@ exports.loom = async (req, res) => {
 	*/
 };
 
+
+/*
+	TODO: 
+	* address: undefined
+	* cancelled: false
+	* email: "sb-lzmr83014728@personal.example.com"
+	* paid: true
+	* payerID: "ABNFPMH7TH83W"
+	* paymentID: "PAYID-L5WJWUI2BS103595F222373J"
+	* paymentToken: "EC-779245958D593204J"
+	PAYPAL: {
+		paypalEmail: payment.email,
+		paid: payment.paid,
+		payerID: payment.payerID,
+		paymentID: payment.paymentID,
+		paymentToken: payment.paymentToken,
+		userID: userData.id,
+		userEmail: userData.email,
+		paymentMethod: 'paypal',Type a message
+	}
+
+*/
+
 exports.test_payment = async (req, res) => {
-	let userID = req.params.userID;
+	let userID = req.body.userID;
 	let groupID = req.params.groupID;
 
 	let group = await Group.findById(groupID);
@@ -206,8 +229,19 @@ exports.test_payment = async (req, res) => {
 		let membersWhoPaid = cycle_status[currentCycle].payment_arrived;
 		if (!membersWhoPaid.includes(userID)) {
 			//receive payment(call payment api here)
+
+			//TODO: push the paypal payment info here as well.
 			membersWhoPaid.push(userID);
 
+			let paypalInfo = {
+				userID: userID,
+				paymentJSON: req.body.PAYPAL
+			}
+			
+			let paymentArray = cycle_status[currentCycle].cycle_status[currentCycle].payment_info
+			paymentArray.push(paypalInfo);
+
+			cycle_status[currentCycle].cycle_status[currentCycle].payment_info = paymentArray;
 			cycle_status[currentCycle].cycle_number = currentCycle;
 			cycle_status[currentCycle].payment_arrived = membersWhoPaid;
 			cycle_status[currentCycle].total_arrived_payment = membersWhoPaid.length;
