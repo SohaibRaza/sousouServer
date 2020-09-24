@@ -15,7 +15,8 @@ const paymentStatusSchema = new Schema({
     },
     current_status: {
         type: String, //Pending / Completed / OnGoing
-        required: true
+        required: true,
+        default: 'PENDING',
     },
 });
 

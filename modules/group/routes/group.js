@@ -9,7 +9,7 @@ router.post('/create', validate, controller.create);
 
 router.get('/get/:id', validate, controller.get_groups );
 
-router.get('/get-group/:id', validate, controller.get_group );
+router.post('/get-group/:id', validate, controller.get_group );
 
 router.get('/joingroup/:userID/:groupID', controller.join_group);
 
