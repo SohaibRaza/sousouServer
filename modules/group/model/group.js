@@ -16,9 +16,9 @@ const paymentStatusSchema = new Schema({
         type: Number,
         required: true
     },
-    payment_arrived: [
-        { type: Schema.Types.ObjectId, ref: 'Users' }
-    ],
+    payment_arrived: {
+        type: [Schema.Types.ObjectId], ref: 'Users', default: []
+    },
     total_arrived_payment: {
         type: Number,
         required: true

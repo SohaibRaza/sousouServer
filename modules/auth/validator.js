@@ -10,7 +10,10 @@ function validator (req, res, next){
 		next();
 
 	} catch (error) {
-		res.status(400).send('Error Occured');
+		res.status(400).json({
+			message:'Error Occured Authenticating user.',
+			Error: error
+		});
 	}
 };
 
