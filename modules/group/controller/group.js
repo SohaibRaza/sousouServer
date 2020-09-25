@@ -141,7 +141,10 @@ exports.join_group = async (req, res) => {
 							cycle_number: 0,
 							payment_arrived: [],
 							total_arrived_payment: 0,
-							current_status: "OnGoing"
+							paid_members: [],
+							unpaid_members: group.members,
+							enqueued_member_payments: [],
+							current_status: "OnGoing",
 						}
 						await Group.findByIdAndUpdate(groupID, { $push: { cycle_status: cycleJson } })
 						console.log("CYCLE STARTED");
@@ -244,18 +247,31 @@ exports.test_payment = async (req, res) => {
 				paymentJSON: req.body.PAYPAL
 			}
 
-			let paymentArray = cycle_status[currentCycle].cycle_status[currentCycle].payment_info
+			let paymentArray = cycle_status[currentCycle].payment_info
 			paymentArray.push(paypalInfo);
 
-			cycle_status[currentCycle].cycle_status[currentCycle].payment_info = paymentArray;
+			cycle_status[currentCycle].payment_info = paymentArray;
 			cycle_status[currentCycle].cycle_number = currentCycle;
 			cycle_status[currentCycle].payment_arrived = membersWhoPaid;
 			cycle_status[currentCycle].total_arrived_payment = membersWhoPaid.length;
 
 			//check if the cycle's whole payment is received?
 			if (membersWhoPaid.length == group.members_limit) {
-				//end this cycle and start new one
+				//randomly select a member to assign him the cycle's payment.
+				let unpaidMembers = cycle_status[currentCycle].unpaid_members;
+				const randomMember = unpaidMembers[Math.floor(Math.random() * unpaidMembers.length)];
+				
+				let enqueuedMembers = cycle_status[currentCycle].enqueued_member_payments;
+				enqueuedMembers.push(randomMember);
+
+				let indexOfMember = unpaidMembers.indexOf(randomMember);
+				unpaidMembers.splice(indexOfMember, 1);
+
+				//Assign the payment, end this cycle, and start new one..
+				cycle_status[currentCycle].unpaid_members = unpaidMembers;
+				cycle_status[currentCycle].enqueued_member_payments = enqueuedMembers;
 				cycle_status[currentCycle].current_status = "Completed";
+
 				let result = await Group.findByIdAndUpdate(groupID, { cycle_status: cycle_status });
 				if (result) {
 					if (!isLastCycle) {

@@ -23,6 +23,21 @@ const paymentStatusSchema = new Schema({
         type: Number,
         required: true
     },
+    paid_members:
+    {
+        type: [Schema.Types.ObjectId],
+        ref: 'Users',
+        default: []
+    },
+    unpaid_members: {
+        type: [Schema.Types.ObjectId],
+        ref: 'Users',
+    },
+    enqueued_member_payments:{
+        type: [Schema.Types.ObjectId],
+        ref: 'Users',
+        default: []
+    },
     current_status: {
         type: String, //Pending / Completed / OnGoing
         required: true,
@@ -41,19 +56,7 @@ const group = new Schema({
         trim: true,
         minlength: 4
     },
-    paid_members:
-    {
-        type: [Schema.Types.ObjectId],
-        ref: 'Users'
-    },
-    unpaid_members: {
-        type: [Schema.Types.ObjectId],
-        ref: 'Users'
-    },
-    enqueued_payments:{
-        type: [Schema.Types.ObjectId],
-        ref: 'Users'
-    },
+    
     members: [
         { type: Schema.Types.ObjectId, ref: 'Users' }
     ],
