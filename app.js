@@ -17,6 +17,7 @@ const usersRoutes = require('./modules/users/routes/users');  // Users routes im
 const groupRoutes = require('./modules/group/routes/group');
 const authRoute = require('./modules/auth/auth');
 const paymentRoutes = require('./modules/payment/routes/payment');
+const adminRoutes = require('./modules/admin/routes/admin')
 
 /* ------------------------------- Middleware ------------------------------- */
 
@@ -37,6 +38,7 @@ app.use('/users', usersRoutes);  // Connecting to Products
 app.use('/group', groupRoutes);
 app.use('/api/auth', authRoute); // Connected to Authentication
 app.use('/payment', paymentRoutes);
+app.use('/admin', adminRoutes);
 // app.get('*', (req,res) =>{
 // 	console.log("----- * PATH -----", req);
 //     res.sendFile(path.join(__dirname+'/client/build/index.html'));
