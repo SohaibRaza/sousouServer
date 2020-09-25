@@ -16,9 +16,9 @@ const paymentStatusSchema = new Schema({
         type: Number,
         required: true
     },
-    payment_arrived: [
-        { type: Schema.Types.ObjectId, ref: 'Users' }
-    ],
+    payment_arrived: {
+        type: [Schema.Types.ObjectId], ref: 'Users', default: []
+    },
     total_arrived_payment: {
         type: Number,
         required: true
@@ -40,6 +40,19 @@ const group = new Schema({
         required: true,
         trim: true,
         minlength: 4
+    },
+    paid_members:
+    {
+        type: [Schema.Types.ObjectId],
+        ref: 'Users'
+    },
+    unpaid_members: {
+        type: [Schema.Types.ObjectId],
+        ref: 'Users'
+    },
+    enqueued_payments:{
+        type: [Schema.Types.ObjectId],
+        ref: 'Users'
     },
     members: [
         { type: Schema.Types.ObjectId, ref: 'Users' }
