@@ -82,7 +82,8 @@ const group = new Schema({
     },
     members_limit: {
         type: Number,
-        require: true
+        require: true,
+        min: 2
     },
     cycle_status: {
         type: [paymentStatusSchema],
