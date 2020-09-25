@@ -11,9 +11,9 @@ router.get('/get/:id', validate, controller.get_groups );
 
 router.post('/get-group/:id', validate, controller.get_group );
 
-router.get('/joingroup/:userID/:groupID', controller.join_group);
+router.post('/joingroup/:userID/:groupID', controller.join_group);
 
-router.post('/testpayment/:groupID/:userID', validate, controller.test_payment);
+router.post('/testpayment/:groupID', validate, controller.test_payment);
 
 router.post('/update/:groupID', validate, controller.update)
 

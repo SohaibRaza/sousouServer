@@ -107,8 +107,11 @@ exports.get_group = async (req, res) => {
 
 exports.join_group = async (req, res) => {
 	try {
+		// TODO: groupID and userID both exist in group
+		console.log('USER_ID', req.body);
 		let userID = req.params.userID;
 		let groupID = req.params.groupID;
+		console.log("userID: ", userID, "groupID: ", groupID);
 		//get the group of given group ID
 		const group = await Group.findById(groupID);
 		if (group) {
@@ -118,7 +121,10 @@ exports.join_group = async (req, res) => {
 			let membersArray = Object.values(group.members);
 			for (const member of membersArray) {
 				if (req.body.userID === member.toString()) {
-					return res.json({ Error: "Already Joined" });
+					return res.status(400).json({
+						message: "Already Joined",
+						success: false
+					});
 				}
 			}
 
@@ -190,7 +196,7 @@ exports.loom = async (req, res) => {
 
 
 /*
-	TODO: 
+	TODO:
 	* address: undefined
 	* cancelled: false
 	* email: "sb-lzmr83014728@personal.example.com"
@@ -237,7 +243,7 @@ exports.test_payment = async (req, res) => {
 				userID: userID,
 				paymentJSON: req.body.PAYPAL
 			}
-			
+
 			let paymentArray = cycle_status[currentCycle].cycle_status[currentCycle].payment_info
 			paymentArray.push(paypalInfo);
 
