@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const UsersModel = require('../modules/users/model/users');
 
 
-const authorize = (req, res, next) => {
+const authorize = async (req, res, next) => {
 	const token = req.header('auth-token');
 	if (!token) return res.sendStatus(403);
 	try {
