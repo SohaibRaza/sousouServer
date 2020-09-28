@@ -6,12 +6,13 @@ function validator (req, res, next){
 	try {
 		const verified = jwt.verify(token, process.env.TOKEN_SECRET)
 		//if (!verified) return res.sendStatus(403);
+		console.log("VERIFIED: ", verified);
         req.user = verified;
 		next();
 
 	} catch (error) {
 		res.status(400).json({
-			message:'Error Occured Authenticating user.',
+			message:'Error Occurred Authenticating user.',
 			Error: error
 		});
 	}

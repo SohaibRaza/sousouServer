@@ -50,7 +50,7 @@ exports.login = async (req, res)=>{
                 console.log(req.body)
                 const token = jwt.sign({
                         id: checkEmail._id,
-                        usernaem: checkEmail.username
+                        username: checkEmail.username
                     },
                     process.env.TOKEN_SECRET
                 );

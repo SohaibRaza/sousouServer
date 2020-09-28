@@ -5,7 +5,7 @@ const group = require('../../group/model/group');
 exports.add = async (req, res) => {
 	try {
 		console.log("Request: ", req.body);
-		const data = await UsersModel.insertMany(req.body)
+		const data = await UsersModel.insertMany(req.body);
 		res.status(302).send("user successfully added");
 	} catch (err) {
 		console.log("Error: ", err);
@@ -17,9 +17,8 @@ exports.add = async (req, res) => {
 exports.find = async (req, res) => {
 	console.log("Request: ", req.params.id);
 	try {
-		const user = await UsersModel.findById(req.params.id)
+		const user = await UsersModel.findById(req.params.id);
 
-		console.log(typeof(user));
 		if (user) {
 			console.log("User Profile:>> ",user);
 			const userData = {
