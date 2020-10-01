@@ -133,6 +133,7 @@ exports.join_group = async (req, res) => {
 				//means there is still a place
 				//get new user's details from POST body
 				let newUserID = req.body.userID;
+				group.members.push(newUserID);
 				const result = await Group.findByIdAndUpdate(groupID, { $push: { members: newUserID } });
 				if (result) {
 					currentNumberOfMember++;
@@ -221,7 +222,8 @@ exports.loom = async (req, res) => {
 */
 
 exports.test_payment = async (req, res) => {
-	let userID = req.body.userID;
+	console.log("REQUEST PAYMENT", req.body);
+	let userID = req.body.PAYPAL.userID;
 	let groupID = req.params.groupID;
 
 	let group = await Group.findById(groupID);
@@ -260,7 +262,7 @@ exports.test_payment = async (req, res) => {
 				//randomly select a member to assign him the cycle's payment.
 				let unpaidMembers = cycle_status[currentCycle].unpaid_members;
 				const randomMember = unpaidMembers[Math.floor(Math.random() * unpaidMembers.length)];
-				
+
 				let enqueuedMembers = cycle_status[currentCycle].enqueued_member_payments;
 				enqueuedMembers.push(randomMember);
 
@@ -279,7 +281,10 @@ exports.test_payment = async (req, res) => {
 							cycle_number: currentCycle + 1,
 							payment_arrived: [],
 							total_arrived_payment: 0,
-							current_status: "OnGoing"
+							current_status: "OnGoing",
+							enqueued_member_payments: enqueuedMembers,
+							unpaid_members: unpaidMembers,
+							paid_members: cycle_status[currentCycle].paid_members
 						}
 
 						await Group.findByIdAndUpdate(groupID, { $push: { cycle_status: newCycleJSON } })
@@ -327,6 +332,7 @@ exports.test_payment = async (req, res) => {
 			message: "User do not belongs to this group.",
 			success: false
 		}
+		console.log("ERROR: ");
 
 		res.status(404).json(responseJSON);
 	}

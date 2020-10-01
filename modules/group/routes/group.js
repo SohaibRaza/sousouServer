@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const controller =  require('../controller/group');
 const validate = require('../../auth/validator');
-const checkMembership = require('../middlewares/checkMembership')
 
 //router.get('/', controller.create);
 router.post('/create', validate, controller.create);

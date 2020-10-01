@@ -6,7 +6,7 @@ const Schema = mongoose.Schema
 const paypalPaymentInfo = new Schema({
     userID: { type: Schema.Types.ObjectId, ref: 'Users' },
     paymentJSON: {
-        type: String,
+        type: Object,
         required: true
     }
 })
@@ -56,7 +56,7 @@ const group = new Schema({
         trim: true,
         minlength: 4
     },
-    
+
     members: [
         { type: Schema.Types.ObjectId, ref: 'Users' }
     ],
