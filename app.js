@@ -30,10 +30,15 @@ app.use(cors()); // Use this after the variable declaration
 
 
 
-// if(process.env.NODE_ENV === 'production'){
-//     //set static folder
-//     app.use(express.static(path.join(__dirname, 'client/build')));
-// }
+if(process.env.NODE_ENV === 'production'){
+    //set static folder
+	app.use(express.static(path.join(__dirname, 'client/build')));
+
+	app.get('*', (req,res) =>{
+		console.log("----- * PATH -----", req);
+		res.sendFile(path.join(__dirname+'/client/build/index.html'));
+	});
+}
 
 app.use('/users', usersRoutes);  // Connecting to Products
 app.use('/group', groupRoutes);
@@ -41,10 +46,7 @@ app.use('/api/auth', authRoute); // Connected to Authentication
 app.use('/payment', paymentRoutes);
 app.use('/admin', adminRoutes);
 app.use('/email', emailRoutes);
-// app.get('*', (req,res) =>{
-// 	console.log("----- * PATH -----", req);
-//     res.sendFile(path.join(__dirname+'/client/build/index.html'));
-// });
+
 // app.get("/", (req, res) => {
 //     res.json({'Success': 'Welcome home'});
 // })
