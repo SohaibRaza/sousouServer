@@ -25,6 +25,8 @@ const users = new Schema({
         required: true,
         unique: true
     },
+    resetToken: String,
+    expireToken: Date,
     date: {
         type: String,
     },
