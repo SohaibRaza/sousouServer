@@ -20,7 +20,7 @@ exports.find = async (req, res) => {
 		const user = await UsersModel.findById(req.params.id);
 
 		if (user) {
-			console.log("User Profile:>> ",user);
+			console.log("User Profile:>> ", user);
 			const userData = {
 				_id: user._id,
 				first_name: user.first_name,
@@ -49,13 +49,6 @@ exports.delete = async (req, res) => {
 	}
 };
 
-// UPDATE User
-exports.update = async (req, res) => {
-	try {
-	} catch (error) {
-		res.json(error);
-	}
-};
 
 
 exports.generateGroupReferral = async (req, res) => {
@@ -67,7 +60,7 @@ exports.generateGroupReferral = async (req, res) => {
 		let groupID = req.params.groupID;
 		let responseJSON = {
 			userId: userID,
-			referralURL: endpoint+'/group/joingroup/'+userID+ '/'+groupID
+			referralURL: endpoint + '/group/joingroup/' + userID + '/' + groupID
 		}
 		res.status(200).json(responseJSON);
 
@@ -75,4 +68,36 @@ exports.generateGroupReferral = async (req, res) => {
 	} catch (error) {
 		res.json(error);
 	}
+}
+
+
+exports.update = async (req, res) => {
+
+	const id = req.params.userID;
+	const updateOps = {};
+	Object.keys(req.body).forEach((key) => {
+		updateOps[key] = req.body[key];
+	})
+
+	try {
+		const result = await UsersModel.findByIdAndUpdate(id, { $set: updateOps });
+		if (result) {
+			res.status(200).json({
+				message: "User updated",
+				result: result
+			});
+		} else {
+			res.status(400).json({
+				"error": "Unable to update"
+			});
+		}
+
+	} catch (err) {
+		res.status(400).json({
+			"error": error
+		});
+	}
+
+	return;
+
 }
