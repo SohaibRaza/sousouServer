@@ -62,3 +62,39 @@ exports.getAllUsers = async (req, res) => {
         return res.json({ error: err })
     }
 }
+exports.deleteUser = async (req, res) => {
+    try{
+        let userID = req.params.userID;
+        let user = await UsersModel.findByIdAndDelete(userID)
+        if(user){
+            return res.status(200).json({
+                message: "Successfully Deleted User",
+                user: user
+            })
+        }else{
+            return res.send({
+                error: "Something goes wrong"
+            })
+        }
+    }catch(err){
+        return res.json({ error: err })
+    }
+}
+exports.deleteGroup = async (req, res) => {
+    try{
+        let groupID = req.params.groupID;
+        let group = await GroupsModel.findByIdAndDelete(groupID)
+        if(group){
+            return res.status(200).json({
+                message: "Successfully Deleted Group",
+                group: group
+            })
+        }else{
+            return res.send({
+                error: "Something goes wrong"
+            })
+        }
+    }catch(err){
+        return res.json({ error: err })
+    }
+}
