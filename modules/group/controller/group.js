@@ -95,7 +95,8 @@ exports.get_group = async (req, res) => {
 				console.log('isMemberPartOfGroup: ', isMemberPartOfGroup);
 			}
 		}
-
+		console.log('after loop');
+		return res.status(200).json({ group: data });
 	} catch (error) {
 		console.log("Error: ", error);
 		res.status(400).json({ message: error })
