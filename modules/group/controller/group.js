@@ -95,9 +95,6 @@ exports.get_group = async (req, res) => {
 				console.log('isMemberPartOfGroup: ', isMemberPartOfGroup);
 			}
 		}
-		console.log('after loop');
-		if (isMemberPartOfGroup) return res.status(200).json({ group: data });
-		else return res.status(400).json({ error: "Access denied to view group." })
 
 	} catch (error) {
 		console.log("Error: ", error);
