@@ -17,6 +17,19 @@ exports.create = async (req, res) => {
 	}
 };
 
+exports.delete = async (req, res) => {
+	try {
+		const id = req.params.groupID;
+		console.log("id ::: ",id);
+		const result = await Group.deleteOne({_id: id});
+		res.status(200).json({message: 'deleted '});
+	} catch (error) {
+		console.log('ERROR Deleting Group: ', error);
+		res.status(400).json({error: error});
+	}
+};
+
+
 exports.update = async (req, res) => {
 
 	const id = req.params.groupID;

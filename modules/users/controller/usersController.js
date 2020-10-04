@@ -1,6 +1,6 @@
 const UsersModel = require('../model/users');
 const group = require('../../group/model/group');
-
+const emailValidator = require('../../../utils/emailValidator');
 // Add user
 exports.add = async (req, res) => {
 	try {
@@ -80,6 +80,10 @@ exports.update = async (req, res) => {
 	})
 
 	try {
+		// if (req.body.email) {
+		// 	emailValidator(req.body.email)
+		// }
+		if (!emailValidator(req.body.email)) return res.status(400).json({error: "invalid email"});
 		const result = await UsersModel.findByIdAndUpdate(id, { $set: updateOps });
 		if (result) {
 			res.status(200).json({
